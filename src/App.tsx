@@ -24,7 +24,7 @@ function App() {
 
   const parseVideoId = (url: string) => {
     const parts = url?.split('?')[1]?.split('&') || []
-    const videoId = parts.find((part: string) => part?.slice(0,2) === 'v=').slice(2)
+    const videoId = parts.find((part: string) => part?.slice(0,2) === 'v=')?.slice(2) || ''
     return videoId
   }
 
