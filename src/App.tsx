@@ -7,24 +7,24 @@ import { useState } from 'react'
 
 function App() {
   /*** LOCAL STATE ***/
-  const [videoID, setVideoID] = useState('')
+  const [videoUrl, setVideoUrl] = useState('')
   const [videoData, setVideoData] = useState<any | null>(null)
 
   // local data derived from state
   const { channelTitle, localized, publishedAt } = videoData || {}
-  const fullTitle = `${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoID}]`
+  const fullTitle = `${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoUrl}]`
 
   /*** CALLBACKS ***/
 
   const changeVideoID = (e: any) => {
-    setVideoID(e.target.value)
+    setVideoUrl(e.target.value)
     setVideoData(null)
   }
 
   const fetchVideoData = async () => {
     const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
     const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?id=${videoID}&part=snippet&key=${apiKey}`
+      `https://www.googleapis.com/youtube/v3/videos?id=${videoUrl}&part=snippet&key=${apiKey}`
     )
     const data = await res.json()
     const item = data.items?.[0]
@@ -34,7 +34,7 @@ function App() {
   }
 
   const clearVideoData = () => {
-    setVideoID('')
+    setVideoUrl('')
     setVideoData(null)
   }
 
@@ -45,7 +45,7 @@ function App() {
       <div className="mb-5">
         <Input
           className="w-[300px] mr-1"
-          value={videoID}
+          value={videoUrl}
           onChange={changeVideoID}
         />
         <Button
@@ -65,7 +65,7 @@ function App() {
       {videoData && (
         <img
           className=" w-[600px] h=[337px]"
-          src={`https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`}
+          src={`https://img.youtube.com/vi/${videoUrl}/maxresdefault.jpg`}
         />
       )}
       </div>
