@@ -1,6 +1,7 @@
 import './App.css'
 
 import { Button } from '@/components/ui/button'
+import { Copy } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 
@@ -8,6 +9,7 @@ function App() {
   const [videoID, setVideoID] = useState('')
   const [videoData, setVideoData] = useState<any | null>(null)
   const { channelTitle, localized, publishedAt } = videoData || {}
+  const fullTitle = `${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoID}]`
 
   const changeVideoID = (e: any) => {
     setVideoID(e.target.value)
@@ -65,7 +67,18 @@ function App() {
       {videoData && (
         <>
           <p><strong>Filename:</strong>{}</p>
-          <p>{`${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoID}]`}</p>
+          <div>
+            <code className="bg-gray-200 py-1 px-2 rounded-sm text-[13px]">
+              {fullTitle}
+            </code>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigator.clipboard.writeText(fullTitle)}
+            >
+              <Copy />
+            </Button>
+          </div>
         </>
       )}
     </section>
