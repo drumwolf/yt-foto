@@ -6,10 +6,15 @@ import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 
 function App() {
+  /*** LOCAL STATE ***/
   const [videoID, setVideoID] = useState('')
   const [videoData, setVideoData] = useState<any | null>(null)
+
+  // local data derived from state
   const { channelTitle, localized, publishedAt } = videoData || {}
   const fullTitle = `${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoID}]`
+
+  /*** CALLBACKS ***/
 
   const changeVideoID = (e: any) => {
     setVideoID(e.target.value)
