@@ -22,6 +22,9 @@ function App() {
           Submit YouTube URL
         </Button>
       </div>
+      {videoID && (
+        <img className="mx-auto" src={`https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`} />
+      )}
     </section>
   )
 }
