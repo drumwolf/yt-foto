@@ -7,24 +7,33 @@ import { useState } from 'react'
 
 function App() {
   /*** LOCAL STATE ***/
-  const [videoUrl, setVideoUrl] = useState('')
+  const [videoUrl, setVideoUrl] = useState<string>('')
+  const [videoId, setVideoId] = useState<string>('')
   const [videoData, setVideoData] = useState<any | null>(null)
 
   // local data derived from state
   const { channelTitle, localized, publishedAt } = videoData || {}
-  const fullTitle = `${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoUrl}]`
+  const fullTitle = `${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoId}]`
 
   /*** CALLBACKS ***/
 
-  const changeVideoID = (e: any) => {
+  const changeVideoUrl = (e: any) => {
     setVideoUrl(e.target.value)
     setVideoData(null)
   }
 
+  const parseVideoId = (url: string) => {
+    const parts = url?.split('?')[1]?.split('&') || []
+    const videoId = parts.find((part: string) => part?.slice(0,2) === 'v=').slice(2)
+    return videoId
+  }
+
   const fetchVideoData = async () => {
+    const videoId = parseVideoId(videoUrl)
+    setVideoId(videoId)
     const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
     const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?id=${videoUrl}&part=snippet&key=${apiKey}`
+      `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=${apiKey}`
     )
     const data = await res.json()
     const item = data.items?.[0]
@@ -46,7 +55,7 @@ function App() {
         <Input
           className="w-[300px] mr-1"
           value={videoUrl}
-          onChange={changeVideoID}
+          onChange={changeVideoUrl}
         />
         <Button
           className="my-3 px-4 ml-1"
@@ -65,7 +74,7 @@ function App() {
       {videoData && (
         <img
           className=" w-[600px] h=[337px]"
-          src={`https://img.youtube.com/vi/${videoUrl}/maxresdefault.jpg`}
+          src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
         />
       )}
       </div>
