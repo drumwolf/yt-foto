@@ -9,6 +9,11 @@ function App() {
   const [videoData, setVideoData] = useState<any | null>(null)
   const { channelTitle, localized, publishedAt } = videoData || {}
 
+  const changeVideoID = (e: any) => {
+    setVideoID(e.target.value)
+    setVideoData(null)
+  }
+
   const fetchVideoData = async () => {
     const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
     const res = await fetch(
@@ -34,7 +39,7 @@ function App() {
         <Input
           className="w-[300px] mr-1"
           value={videoID}
-          onChange={(e: any) => setVideoID(e.target.value)}
+          onChange={changeVideoID}
         />
         <Button
           className="my-3 px-4 ml-1"
@@ -49,15 +54,19 @@ function App() {
           Clear video data
         </Button>
       </div>
+      <div className="mx-auto w-[600px] h-[337px] bg-gray-200 border border-gray-400 my-2">
       {videoData && (
-        <div>
-          <img
-            className="mx-auto w-[600px] my-3"
-            src={`https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`}
-          />
+        <img
+          className=" w-[600px] h=[337px]"
+          src={`https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`}
+        />
+      )}
+      </div>
+      {videoData && (
+        <>
           <p><strong>Filename:</strong>{}</p>
           <p>{`${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoID}]`}</p>
-        </div>
+        </>
       )}
     </section>
   )
