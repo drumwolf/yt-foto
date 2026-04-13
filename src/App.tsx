@@ -7,8 +7,9 @@ import { useState } from 'react'
 function App() {
   const [videoID, setVideoID] = useState('')
   const [videoData, setVideoData] = useState<any | null>(null)
+  const { channelTitle, localized, publishedAt } = videoData || {}
 
-  async function fetchVideoData() {
+  const fetchVideoData = async () => {
     const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
     const res = await fetch(
       `https://www.googleapis.com/youtube/v3/videos?id=${videoID}&part=snippet&key=${apiKey}`
@@ -20,29 +21,42 @@ function App() {
     }
   }
 
+  const clearVideoData = () => {
+    setVideoID('')
+    setVideoData(null)
+  }
+
+  /*** FINAL COMPONENT ***/
   return (
     <section className="p-4 text-center">
       <h1 className="mb-2">yt-foto</h1>
       <div className="mb-5">
         <Input
-          className="w-[300px]"
+          className="w-[300px] mr-1"
+          value={videoID}
           onChange={(e: any) => setVideoID(e.target.value)}
         />
         <Button
-          className="my-3 px-4 ml-2"
+          className="my-3 px-4 ml-1"
           onClick={fetchVideoData}
         >
           Fetch video data
         </Button>
+        <Button
+          className="my-3 px-4 ml-1"
+          onClick={clearVideoData}
+        >
+          Clear video data
+        </Button>
       </div>
-      {videoID && (
+      {videoData && (
         <div>
           <img
             className="mx-auto w-[600px] my-3"
             src={`https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`}
           />
           <p><strong>Filename:</strong>{}</p>
-          <p>{`(${videoData?.publishedAt.slice(0,10)}) ${videoID}`}</p>
+          <p>{`${channelTitle} (${publishedAt?.slice(0,10)}) - ${localized?.title} [${videoID}]`}</p>
         </div>
       )}
     </section>
