@@ -1,8 +1,10 @@
+import './App.css'
+
 function App() {
   return (
-    <div>
+    <section className="p-4 text-center">
       <h1>yt-foto</h1>
-    </div>
+    </section>
   )
 }
 
